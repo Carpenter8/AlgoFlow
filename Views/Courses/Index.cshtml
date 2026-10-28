@@ -1,0 +1,62 @@
+@model IReadOnlyList<CourseCatalogItemViewModel>
+@{
+    ViewData["Title"] = "DSA courses";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Learn at your own pace</div>
+        <h1>Explore the courses</h1>
+        <p>Start with the fundamentals, then follow the ideas that interest you.</p>
+        <form class="catalog-filters" asp-action="Index" method="get">
+            <label class="visually-hidden" for="search">Search courses</label>
+            <input id="search" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search courses" />
+            <label class="visually-hidden" for="level">Filter by level</label>
+            <select id="level" name="level" class="form-select">
+                <option value="">All levels</option>
+                @foreach (var level in Enum.GetValues<CourseLevel>())
+                {
+                    if (ViewBag.Level is CourseLevel selected && selected == level)
+                    {
+                        <option value="@level" selected>@level</option>
+                    }
+                    else
+                    {
+                        <option value="@level">@level</option>
+                    }
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Find courses</button>
+        </form>
+    </div>
+</section>
+
+<section class="container catalog-section">
+    @if (Model.Count == 0)
+    {
+        <div class="empty-state">
+            <span class="path-icon icon-violet" aria-hidden="true">⌘</span>
+            <h2>No courses match that search</h2>
+            <p>Try a different title or level.</p>
+            <a class="text-link" asp-action="Index">Clear filters <span aria-hidden="true">→</span></a>
+        </div>
+    }
+    else
+    {
+        <div class="course-grid">
+            @foreach (var course in Model)
+            {
+                <article class="course-card">
+                    <div class="course-card-top">
+                        <span class="course-level">@course.Level</span>
+                        <span class="course-access">@(course.IsPremium ? "Premium" : "Free")</span>
+                    </div>
+                    <h2><a asp-action="Details" asp-route-slug="@course.Slug">@course.Title</a></h2>
+                    <p>@course.Summary</p>
+                    <div class="course-card-meta"><span>@course.LessonCount lessons</span><span>·</span><span>@course.ModuleCount modules</span></div>
+                    <a class="text-link course-card-link" asp-action="Details" asp-route-slug="@course.Slug">View course <span aria-hidden="true">→</span></a>
+                </article>
+            }
+        </div>
+    }
+</section>

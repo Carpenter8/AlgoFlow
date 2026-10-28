@@ -1,0 +1,37 @@
+@model Lesson
+@{
+    var course = (Course)ViewBag.Course;
+    ViewData["Title"] = Model.Title;
+    var embedUrl = ViewBag.VideoEmbedUrl as string;
+}
+
+<section class="lesson-page container">
+    <a class="back-link" asp-action="Details" asp-route-slug="@course.Slug">← Back to @course.Title</a>
+    <div class="lesson-heading">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> @Model.Module.Title</div>
+        <h1>@Model.Title</h1>
+        <p>@Model.Summary</p>
+    </div>
+    @if (embedUrl is not null)
+    {
+        <div class="video-frame">
+            <iframe src="@embedUrl" title="@Model.Title — YouTube lesson"
+                    loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+        </div>
+    }
+    else
+    {
+        <div class="empty-state lesson-video-unavailable">
+            <h2>Video not available</h2>
+            <p>This lesson has no valid YouTube video configured yet.</p>
+        </div>
+    }
+    <article class="lesson-notes">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Lesson notes</div>
+        <h2>Take it one step at a time</h2>
+        <p>@Model.Content</p>
+        <p class="video-disclaimer">The video is embedded from YouTube. Opening a lesson does not automatically mark it complete.</p>
+    </article>
+</section>

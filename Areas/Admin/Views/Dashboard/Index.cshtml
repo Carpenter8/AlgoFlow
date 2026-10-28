@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Admin dashboard";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Administration</div>
+        <h1>Admin dashboard</h1>
+        <p>These totals come from the current database. Content management and analytics reports are not yet available.</p>
+    </div>
+</section>
+<section class="container catalog-section">
+    <div class="admin-metrics">
+        <article class="metric-card"><span>Courses</span><strong>@ViewBag.CourseCount</strong></article>
+        <article class="metric-card"><span>Registered users</span><strong>@ViewBag.StudentCount</strong></article>
+        <article class="metric-card"><span>Enrollments</span><strong>@ViewBag.EnrollmentCount</strong></article>
+    </div>
+    <div class="empty-state admin-next">
+        <h2>Content management is the next step</h2>
+        <p>Course editing, user management, and reports are not implemented yet.</p>
+        <a class="text-link" asp-area="" asp-controller="Courses" asp-action="Index">View the public catalog <span aria-hidden="true">→</span></a>
+    </div>
+</section>

@@ -1,0 +1,35 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+
+<section class="form-page">
+    <div class="form-card">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Welcome back</div>
+        <h1>Sign in to AlgoFlow</h1>
+        <p class="form-intro">Continue learning where you left off.</p>
+        <form asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+            <div class="field-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" autocomplete="username" class="form-control" />
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+            <div class="field-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" autocomplete="current-password" class="form-control" />
+                <span asp-validation-for="Password" class="field-error"></span>
+            </div>
+            <div class="remember-row">
+                <input asp-for="RememberMe" />
+                <label asp-for="RememberMe"></label>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">Sign in <span aria-hidden="true">↗</span></button>
+        </form>
+        <p class="form-switch">New to AlgoFlow? <a asp-action="Register">Create a student account</a></p>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

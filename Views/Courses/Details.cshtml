@@ -1,0 +1,73 @@
+@model Course
+@{
+    ViewData["Title"] = Model.Title;
+    var isEnrolled = ViewBag.IsEnrolled is true;
+}
+
+<section class="page-hero course-detail-hero">
+    <div class="container">
+        <a class="back-link" asp-action="Index">← All courses</a>
+        <div class="eyebrow"><span class="eyebrow-dot"></span> @Model.Level · @(Model.IsPremium ? "Premium" : "Free")</div>
+        <h1>@Model.Title</h1>
+        <p>@Model.Description</p>
+        @if (User.Identity?.IsAuthenticated != true)
+        {
+            <a class="btn btn-primary btn-lg" asp-controller="Account" asp-action="Register">Create an account to enroll <span aria-hidden="true">↗</span></a>
+        }
+        else if (isEnrolled)
+        {
+            <a class="btn btn-primary btn-lg" href="#course-content">Continue learning <span aria-hidden="true">↓</span></a>
+        }
+        else if (Model.IsPremium)
+        {
+            <p class="premium-note">This premium course is not available until a verified payment provider is configured.</p>
+        }
+        else
+        {
+            <form asp-action="Enroll" method="post">
+                <input type="hidden" name="courseId" value="@Model.Id" />
+                <button class="btn btn-primary btn-lg" type="submit">Enroll for free <span aria-hidden="true">↗</span></button>
+            </form>
+        }
+    </div>
+</section>
+
+<section class="container course-content-section" id="course-content">
+    <div class="course-content-heading">
+        <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> Curriculum</div>
+            <h2>Course content</h2>
+        </div>
+        <span>@Model.Modules.Sum(module => module.Lessons.Count) lessons</span>
+    </div>
+    @foreach (var module in Model.Modules.OrderBy(module => module.SortOrder))
+    {
+        <section class="module-card">
+            <h3><span class="module-index">@module.SortOrder.ToString("00")</span>@module.Title</h3>
+            @if (module.Lessons.Count == 0)
+            {
+                <p class="module-empty">Lessons coming soon.</p>
+            }
+            else
+            {
+                <ul class="lesson-list">
+                    @foreach (var lesson in module.Lessons.OrderBy(lesson => lesson.SortOrder))
+                    {
+                        <li>
+                            <span class="lesson-play" aria-hidden="true">▶</span>
+                            <div><strong>@lesson.Title</strong><span>@lesson.Summary</span></div>
+                            @if (isEnrolled)
+                            {
+                                <a class="lesson-open" asp-action="Lesson" asp-route-courseSlug="@Model.Slug" asp-route-lessonSlug="@lesson.Slug">Open lesson <span aria-hidden="true">→</span></a>
+                            }
+                            else
+                            {
+                                <span class="lesson-locked" aria-label="Enroll to unlock">Enroll to unlock</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
+</section>

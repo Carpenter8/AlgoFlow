@@ -1,0 +1,42 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Create your account";
+}
+
+<section class="form-page">
+    <div class="form-card">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Your learning starts here</div>
+        <h1>Create your account</h1>
+        <p class="form-intro">Sign up as a student to enroll in courses and keep your learning in one place.</p>
+        <form asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+            <div class="field-group">
+                <label asp-for="DisplayName"></label>
+                <input asp-for="DisplayName" autocomplete="name" class="form-control" />
+                <span asp-validation-for="DisplayName" class="field-error"></span>
+            </div>
+            <div class="field-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" autocomplete="email" class="form-control" />
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+            <div class="field-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" autocomplete="new-password" class="form-control" />
+                <span class="field-hint">At least 10 characters, including upper- and lowercase letters, a number, and a symbol.</span>
+                <span asp-validation-for="Password" class="field-error"></span>
+            </div>
+            <div class="field-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" autocomplete="new-password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">Create student account <span aria-hidden="true">↗</span></button>
+        </form>
+        <p class="form-switch">Already registered? <a asp-action="Login">Sign in</a></p>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

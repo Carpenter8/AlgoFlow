@@ -1,0 +1,42 @@
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "My learning";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Student dashboard</div>
+        <h1>Welcome back, @Model.DisplayName</h1>
+        <p>Your enrolled courses are ready when you are.</p>
+    </div>
+</section>
+
+<section class="container catalog-section">
+    <div class="course-content-heading">
+        <div><div class="eyebrow"><span class="eyebrow-dot"></span> Your learning</div><h2>My courses</h2></div>
+        <a class="text-link" asp-controller="Courses" asp-action="Index">Explore courses <span aria-hidden="true">→</span></a>
+    </div>
+    @if (Model.Courses.Count == 0)
+    {
+        <div class="empty-state">
+            <span class="path-icon icon-violet" aria-hidden="true">⌘</span>
+            <h2>Your learning path starts with one course</h2>
+            <p>Browse the catalog and enroll in a free course to see it here.</p>
+            <a class="btn btn-primary" asp-controller="Courses" asp-action="Index">Browse courses <span aria-hidden="true">↗</span></a>
+        </div>
+    }
+    else
+    {
+        <div class="course-grid">
+            @foreach (var course in Model.Courses)
+            {
+                <article class="course-card">
+                    <div class="course-card-top"><span class="course-level">@course.Level</span><span class="course-access">Enrolled</span></div>
+                    <h2><a asp-controller="Courses" asp-action="Details" asp-route-slug="@course.Slug">@course.Title</a></h2>
+                    <p>@course.Summary</p>
+                    <a class="text-link course-card-link" asp-controller="Courses" asp-action="Details" asp-route-slug="@course.Slug">Continue learning <span aria-hidden="true">→</span></a>
+                </article>
+            }
+        </div>
+    }
+</section>

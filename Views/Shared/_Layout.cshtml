@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#11111a" />
+    <title>@ViewData["Title"] · AlgoFlow</title>
+    <script>
+        const savedTheme = localStorage.getItem("algoflow-theme");
+        document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
+    </script>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AlgoFlow.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg container" aria-label="Main navigation">
+            <a class="navbar-brand brand" asp-controller="Home" asp-action="Index" aria-label="AlgoFlow home">
+                <span class="brand-mark" aria-hidden="true">A</span>
+                <span>algo<span class="brand-accent">flow</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navigation"
+                    aria-controls="main-navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main-navigation">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Courses" asp-action="Index">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#approach">Our approach</a></li>
+                    <li class="nav-item">
+                        <button class="theme-toggle" type="button" id="theme-toggle" aria-pressed="false">
+                            <span aria-hidden="true" id="theme-icon">☼</span>
+                            <span class="visually-hidden" id="theme-label">Switch to light theme</span>
+                        </button>
+                    </li>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item"><a class="nav-link sign-in-link" asp-controller="Student" asp-action="Index">My learning</a></li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a></li>
+                        }
+                        <li class="nav-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button class="nav-link sign-in-link nav-logout" type="submit">Sign out</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link sign-in-link" asp-controller="Account" asp-action="Login">Sign in</a></li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary nav-cta" asp-controller="Account" asp-action="Register">Get started <span aria-hidden="true">↗</span></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main id="main-content" role="main">
+            @RenderBody()
+    </main>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <a class="brand footer-brand" asp-controller="Home" asp-action="Index">
+                <span class="brand-mark" aria-hidden="true">A</span><span>algo<span class="brand-accent">flow</span></span>
+            </a>
+            <p>Master Algorithms. Build Your Logic.</p>
+            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <span class="footer-copyright">&copy; @DateTime.UtcNow.Year AlgoFlow</span>
+        </div>
+    </footer>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
